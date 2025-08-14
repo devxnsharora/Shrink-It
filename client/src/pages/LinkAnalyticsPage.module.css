@@ -1,0 +1,98 @@
+/* client/src/pages/LinkAnalyticsPage.module.css */
+
+.analyticsContainer {
+  width: 100%;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.backLink {
+  display: inline-block;
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+.backLink:hover {
+  color: var(--text-primary);
+}
+
+.analyticsHeader {
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+  border-bottom: 1px solid var(--border-primary);
+}
+.analyticsHeader h1 {
+  font-size: 2rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.analyticsHeader a {
+  font-size: 1rem;
+  color: var(--accent-tertiary);
+  text-decoration: none;
+}
+.analyticsHeader a:hover {
+  text-decoration: underline;
+}
+
+.statusText {
+  text-align: center;
+  font-size: 1.5rem;
+  padding: var(--spacing-2xl);
+  color: var(--text-secondary);
+}
+
+/* === Grid for Stats & Charts === */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.statCard {
+  background: var(--surface-secondary);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-primary);
+}
+.statCard h3 {
+  margin: 0 0 var(--spacing-sm) 0;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+.statCard p {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.chartsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+}
+@media (min-width: 992px) {
+  .chartsGrid {
+    grid-template-columns: 2fr 1fr; /* Make line chart bigger */
+  }
+}
+
+.chartContainer {
+  background: var(--surface-secondary);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-primary);
+}
+.chartContainer h3 {
+  margin-top: 0;
+  font-weight: 600;
+}
+
+.chartWrapper {
+  height: 350px;
+  position: relative;
+}
