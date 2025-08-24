@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom'; // <-- IMPORT THIS
+import { BrowserRouter } from 'react-router-dom'; 
 import { Provider } from 'react-redux';
 import axios from 'axios';
 
@@ -11,7 +11,11 @@ import { store } from './store.js';
 import './index.css';
 
 // Set the default base URL for all API requests
-axios.defaults.baseURL = 'http://localhost:5001';
+const API_BASE_URL = import.meta.env.PROD 
+  ? 'https://shrink-it-backend.onrender.com' //  LIVE RENDER URL
+  : 'http://localhost:5001';                     //  local backend URL
+
+axios.defaults.baseURL = API_BASE_URL;
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
