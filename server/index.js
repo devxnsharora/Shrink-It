@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5001;
 const corsOptions = {
   origin: [
     'http://localhost:5173', // Your local frontend for development
-    'https://shrink-it-tau.vercel.app' // LIVE VERCEL URL
+    'https://shrink-it-henna.vercel.app' // LIVE VERCEL URL
     
   ]
 };

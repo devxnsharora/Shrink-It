@@ -7,13 +7,10 @@
     {
       "source": "/:shortCode([a-zA-Z0-9]{6,})",
       "destination": "https://shrink-it-backend.onrender.com/:shortCode"
-    }
-  ],
-  "redirects": [
+    },
     {
-      "source": "/(.*)",
-      "destination": "/index.html",
-      "statusCode": 200
+      "source": "/((?!api/|.*\\..*).*)",
+      "destination": "/index.html"
     }
   ]
 }
