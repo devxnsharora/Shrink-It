@@ -1,3 +1,4 @@
+
 {
   "rewrites": [
     {
@@ -5,7 +6,11 @@
       "destination": "https://shrink-it-backend.onrender.com/api/:path*"
     },
     {
-      "source": "/((?!_next|favicon.ico|api|.*\\..*).*)",
+      "source": "/:shortCode",
+      "destination": "https://shrink-it-backend.onrender.com/:shortCode"
+    },
+    {
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
