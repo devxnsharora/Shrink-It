@@ -46,7 +46,11 @@ function HomePage() {
         </div>
         <div className="feature-card">
           <h3>Total Control</h3>
-          <p>Set custom aliases, passwords, and expiration dates for your links.</p>
+          <p>Set custom slugs for your links.</p>
+        </div>
+        <div className="feature-card">
+          <h3>Smart Titles with AI</h3>
+          <p>Automatically generate engaging and relevant link titles using Cohere AI.</p>
         </div>
       </div>
     </div>

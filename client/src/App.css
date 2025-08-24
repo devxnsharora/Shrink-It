@@ -73,6 +73,8 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
+  display: flex; /* This helps with vertical alignment */
+  flex-direction: column; /* Stack header and app-container vertically */
 }
 
 /* Animated background elements */
@@ -1164,4 +1166,4 @@ input:focus-visible {
 }
 .custom-slug-input input:focus {
   box-shadow: none; /* Override the default focus shadow */
-}
+} 

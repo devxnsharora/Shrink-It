@@ -1,4 +1,4 @@
-// client/src/components/NewLinkModal.jsx (Debugging Version)
+// client/src/components/NewLinkModal.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -6,64 +6,84 @@ import axios from 'axios';
 function NewLinkModal({ onClose, onLinkCreated }) {
   const [originalUrl, setOriginalUrl] = useState('');
   const [title, setTitle] = useState('');
+  const [customSlug, setCustomSlug] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const { token } = useSelector((state) => state.auth);
+  const [isValidUrl, setIsValidUrl] = useState(true);
 
+  const { token } = useSelector((state) => state.auth);
   const analysisTimeoutRef = useRef(null);
 
-  // --- This is the effect that triggers the analysis ---
-  useEffect(() => {
-    console.log("1. useEffect for URL analysis triggered. Current URL:", originalUrl);
+  // Function to check if a string is a valid URL
+  const validateUrl = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
 
+  // Effect to trigger AI analysis when the user stops typing the URL
+  useEffect(() => {
     if (analysisTimeoutRef.current) {
       clearTimeout(analysisTimeoutRef.current);
     }
-    
-    // Check if the input is a plausible URL
-    if (originalUrl.startsWith('http://') || originalUrl.startsWith('https://')) {
-      console.log("2. URL is valid. Scheduling analysis...");
-      
+
+    if (validateUrl(originalUrl)) {
+      setIsValidUrl(true);
       analysisTimeoutRef.current = setTimeout(() => {
-        // This function will be called after 1 second of inactivity
         handleAnalyzeUrl();
-      }, 1000);
+      }, 1000); // Wait for 1 second of inactivity
+    } else if (originalUrl.trim() !== '') {
+      setIsValidUrl(false);
     }
 
-    // Cleanup function
     return () => {
       if (analysisTimeoutRef.current) {
         clearTimeout(analysisTimeoutRef.current);
       }
     };
-  }, [originalUrl]); // This effect ONLY runs when `originalUrl` changes
+  }, [originalUrl]);
 
+  // Function to call the backend's analysis endpoint
   const handleAnalyzeUrl = async () => {
     if (!originalUrl) return;
-    
-    console.log("3. handleAnalyzeUrl called. Setting isAnalyzing to true.");
     setIsAnalyzing(true);
-    
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
-      console.log("4. Sending POST request to /api/links/analyze with URL:", originalUrl);
-      
       const response = await axios.post('/api/links/analyze', { url: originalUrl }, config);
-      
-      console.log("5. API call successful. Response data:", response.data);
       setTitle(response.data.title);
     } catch (err) {
-      console.error("6. ERROR during URL analysis API call:", err);
+      // Fail silently if analysis doesn't work; user can still type a title
+      console.error('URL analysis failed:', err);
     } finally {
-      console.log("7. Analysis finished. Setting isAnalyzing to false.");
       setIsAnalyzing(false);
     }
   };
 
+  // Function to handle the final form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // ... your existing handleSubmit logic for creating the link ...
+    if (!validateUrl(originalUrl)) {
+      setIsValidUrl(false);
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    try {
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      const linkData = { originalUrl, title, customSlug };
+      const response = await axios.post('/api/links', linkData, config);
+      onLinkCreated(response.data);
+      onClose();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to create link.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -71,30 +91,73 @@ function NewLinkModal({ onClose, onLinkCreated }) {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h2>Create a New Link</h2>
         <form onSubmit={handleSubmit} className="modal-form">
-          {/* ... */}
           <div className="form-group">
             <label htmlFor="originalUrl">Destination URL</label>
-            <input id="originalUrl" type="url"
-              placeholder="https://..."
+            <input
+              id="originalUrl"
+              type="url"
+              placeholder="https://your-long-link.com"
               value={originalUrl}
               onChange={(e) => setOriginalUrl(e.target.value)}
-              autoFocus required
+              className={!isValidUrl ? 'input-error' : ''}
+              autoFocus
+              required
             />
+            {!isValidUrl && (
+              <p className="error-message">Please enter a valid URL (must include http/https).</p>
+            )}
           </div>
+
           <div className="form-group">
-            <label htmlFor="title">Title {isAnalyzing && <span className="analyzing-indicator">(Analyzing...)</span>}</label>
-            <input id="title" type="text"
+            <label htmlFor="title">
+              Title {isAnalyzing && <span className="analyzing-indicator">(Analyzing...)</span>}
+            </label>
+            <input
+              id="title"
+              type="text"
               placeholder="AI will suggest a title..."
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
-          {/* ... your error and actions divs ... */}
+
+          <div className="form-group">
+            <label htmlFor="customSlug">Custom Slug (Optional)</label>
+            <div className="custom-slug-input">
+              <span className="slug-prefix">chmln.lk/</span>
+              <input
+                id="customSlug"
+                type="text"
+                placeholder="my-portfolio"
+                value={customSlug}
+                onChange={(e) => setCustomSlug(e.target.value.replace(/\s/g, '-'))}
+              />
+            </div>
+          </div>
+
+          {error && <p className="error-message">{error}</p>}
+
+          <div className="modal-actions">
+            <button
+              type="button"
+              className="button-secondary"
+              onClick={onClose}
+              disabled={loading}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="button-primary"
+              disabled={loading || !isValidUrl}
+            >
+              {loading ? 'Creating...' : 'Create Link'}
+            </button>
+          </div>
         </form>
       </div>
     </div>
   );
 }
 
-// Omitted handleSubmit for brevity. Use your existing working code.
 export default NewLinkModal;
