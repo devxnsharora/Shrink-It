@@ -124,7 +124,7 @@ function NewLinkModal({ onClose, onLinkCreated }) {
           <div className="form-group">
             <label htmlFor="customSlug">Custom Slug (Optional)</label>
             <div className="custom-slug-input">
-              <span className="slug-prefix">chmln.lk/</span>
+              <span className="slug-prefix">shrink.it/</span>
               <input
                 id="customSlug"
                 type="text"

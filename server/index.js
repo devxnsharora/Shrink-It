@@ -18,14 +18,13 @@ app.use(cors());
 app.use(express.json());
 
 // --- ROUTES ---
-// Correctly map each path to its corresponding router file
 app.use('/api/users', require('./routes/user.routes.js'));
 app.use('/api/links', require('./routes/link.routes.js')); // <-- THE FIX IS HERE
 
-// Redirect route is handled at the top level
 app.get('/:shortCode', handleRedirect);
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`The port is running on port ${PORT}`);
+
+// --- START SERVER ---
+app.listen(PORT, '0.0.0.0', () => { 
+  console.log(`Server is running on port ${PORT}`);
 });
