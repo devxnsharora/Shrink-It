@@ -1,4 +1,3 @@
-
 {
   "rewrites": [
     {
@@ -6,12 +5,15 @@
       "destination": "https://shrink-it-backend.onrender.com/api/:path*"
     },
     {
-      "source": "/:shortCode",
+      "source": "/:shortCode([a-zA-Z0-9]{6,})",
       "destination": "https://shrink-it-backend.onrender.com/:shortCode"
-    },
+    }
+  ],
+  "redirects": [
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/index.html",
+      "statusCode": 200
     }
   ]
 }
