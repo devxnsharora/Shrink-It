@@ -2,7 +2,9 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom'; 
+// --- CHANGE THIS LINE ---
+import { HashRouter } from 'react-router-dom'; 
+// ----------------------
 import { Provider } from 'react-redux';
 import axios from 'axios';
 
@@ -19,12 +21,12 @@ axios.defaults.baseURL = API_BASE_URL;
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* The Redux Provider gives the app access to the global state store */}
     <Provider store={store}>
-      {/* The BrowserRouter provides routing capabilities to the entire app */}
-      <BrowserRouter>
+      {/* --- AND CHANGE THIS LINE --- */}
+      <HashRouter>
         <App />
-      </BrowserRouter>
+      </HashRouter>
+      {/* --------------------------- */}
     </Provider>
   </React.StrictMode>,
 );
