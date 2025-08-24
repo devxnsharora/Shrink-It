@@ -2,7 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://shrink-it-backend.onrender.com/api/:path*"
+      "destination": "https://chameleonlink-backend.onrender.com/api/:path*"
+    },
+    {
+      "source": "/((?!_next|favicon.ico|api|.*\\..*).*)",
+      "destination": "/index.html"
     }
   ]
 }
